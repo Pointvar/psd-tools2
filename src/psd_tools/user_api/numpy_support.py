@@ -188,10 +188,8 @@ def _channel_data_to_PIL(channel_data, channel_ids, color_mode, size, depth,
 
 
 def _merge_bands(bands, color_mode, size, icc_profile):
-    print(bands.keys())
-    print(np.asarray(bands['R']).shape)
     if color_mode == ColorMode.RGB:
-        merged_image = np.stack([bands[key] for key in 'RGBA'], 2)
+        merged_image = np.stack([bands[key] for key in 'RGB'], 2)
     elif color_mode == ColorMode.CMYK:
         merged_image = np.stack([bands[key] for key in 'CMYK'], 2)
         merged_bytes = tobytes(merged_image)
@@ -202,11 +200,9 @@ def _merge_bands(bands, color_mode, size, icc_profile):
     else:
         raise NotImplementedError()
 
-    # alpha = bands.get('A')
-    # if alpha:
-    #     print(merged_image.shape)
-    #     print(alpha)
-    #     merged_image = np.stack([merged_image, alpha], 2)
+    alpha = bands.get('A')
+    if alpha is not None:
+        merged_image = np.concatenate([merged_image, np.expand_dims(alpha, 2)], 2)
 
     return merged_image
 
@@ -220,7 +216,6 @@ def _get_band_images(channel_data, channel_ids, color_mode, size, depth):
 
         im = _decompress_channel(channel, depth, size)
         im = np.asarray(im).reshape(size)
-        print('_get_band_images', im.shape, size)
         bands[pil_band] = im
     return bands
 

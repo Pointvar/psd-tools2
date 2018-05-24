@@ -121,7 +121,6 @@ class PSDImage(_TaggedBlockMixin, _GroupMixin, _PSDImageBuilder):
         self._smart_objects = None
         self._patterns = None
         self._image_resource_blocks = None
-        print('BUILDPSD')
         self.build(decoded_data)
 
     @classmethod

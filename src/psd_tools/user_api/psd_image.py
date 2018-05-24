@@ -7,6 +7,7 @@ import psd_tools.reader
 import psd_tools.decoder
 from psd_tools.constants import TaggedBlock, SectionDivider, ImageResourceID
 from psd_tools.user_api import pymaging_support
+from psd_tools.user_api import numpy_support
 from psd_tools.user_api import pil_support
 from psd_tools.user_api import BBox, Pattern
 from psd_tools.user_api.smart_object import SmartObject
@@ -120,6 +121,7 @@ class PSDImage(_TaggedBlockMixin, _GroupMixin, _PSDImageBuilder):
         self._smart_objects = None
         self._patterns = None
         self._image_resource_blocks = None
+        print('BUILDPSD')
         self.build(decoded_data)
 
     @classmethod
@@ -175,6 +177,10 @@ class PSDImage(_TaggedBlockMixin, _GroupMixin, _PSDImageBuilder):
     def as_pymaging(self):
         """Returns a pymaging.Image for this PSD file."""
         return pymaging_support.extract_composite_image(self.decoded_data)
+
+    def as_numpy(self):
+        """Returns a pymaging.Image for this PSD file."""
+        return numpy_support.extract_composite_image(self.decoded_data)
 
     @property
     def name(self):
@@ -355,6 +361,9 @@ class PSDImage(_TaggedBlockMixin, _GroupMixin, _PSDImageBuilder):
 
     def _layer_as_pymaging(self, index):
         return pymaging_support.extract_layer_image(self.decoded_data, index)
+
+    def _layer_as_numpy(self, index):
+        return numpy_support.extract_layer_image(self.decoded_data, index)
 
     def __repr__(self):
         return "<%s: size=%dx%d, layer_count=%d>" % (

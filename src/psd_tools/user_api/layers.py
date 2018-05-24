@@ -119,6 +119,13 @@ class _RawLayer(_TaggedBlockMixin):
         else:
             return None
 
+    def as_numpy(self):
+        """Returns a numpy array for this layer."""
+        if self.has_pixels():
+            return self._psd._layer_as_numpy(self._index)
+        else:
+            return None
+
     def as_pymaging(self):
         """Returns a pymaging.Image for this layer."""
         if self.has_pixels():

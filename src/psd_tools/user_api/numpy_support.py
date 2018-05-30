@@ -204,6 +204,8 @@ def _merge_bands(bands, color_mode, size, icc_profile):
     if alpha is not None:
         merged_image = np.concatenate([merged_image, np.expand_dims(alpha, 2)], 2)
 
+    merged_image = np.maximum(0, merged_image)
+
     return merged_image
 
 
